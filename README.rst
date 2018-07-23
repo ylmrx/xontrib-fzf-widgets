@@ -20,6 +20,7 @@ Current widgets
 
 - **ssh:** Search in `/etc/ssh/ssh_config` or `~/.ssh/config` items and issue `ssh` command on the chosen item.
 - **history insert** Search in all history entries and insert the chosen command to the prompt.
+- **find file** Find one or more files in the current directory and its sub-directories.
 
 How to use it
 ----------------
@@ -47,6 +48,7 @@ And set your desired keybindings for each widget in `~/.xonshrc` file or set it 
 
     $fzf_history_binding = Keys.ControlR
     $fzf_ssh_binding = Keys.ControlS
+    $fzf_file_binding = Keys.ControlT
 
 You can find the names of various keys here_ in ``python-prompt-toolkit``.
 

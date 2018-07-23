@@ -36,6 +36,24 @@ def fzf_insert_history(event):
         event.current_buffer.insert_text(choice)
 
 
+def fzf_insert_file(event):
+    env = os.environ
+    if 'fzf_find_command' in ${...}:
+        env['FZF_DEFAULT_COMMAND'] = $fzf_find_command
+    if 'FZF_DEFAULT_OPTS' in ${...}:
+        env['FZF_DEFAULT_OPTS'] = $FZF_DEFAULT_OPTS
+    choice = subprocess.run([get_fzf_binary_path(), '-m', '--reverse', '--height=40%'], stdout=subprocess.PIPE, universal_newlines=True, env=env).stdout.strip()
+
+    event.cli.renderer.erase()
+
+    if choice:
+        command = ''
+        for c in choice.splitlines():
+            command += "'" + c.strip() + "' "
+
+        event.current_buffer.insert_text(command.strip())
+
+
 def fzf_prompt_from_string(string):
     choice = subprocess.run([get_fzf_binary_path(), '--tiebreak=index', '+m', '--reverse', '--height=40%'], input=string, stdout=subprocess.PIPE, universal_newlines=True).stdout.strip()
     return choice
@@ -66,3 +84,7 @@ def custom_keybindings(bindings, **kw):
 
         if choice:
             event.current_buffer.insert_text('ssh ' + choice)
+
+    @handler('fzf_file_binding')
+    def fzf_file(event):
+        fzf_insert_file(event)
