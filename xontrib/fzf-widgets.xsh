@@ -23,7 +23,7 @@ def fzf_insert_history(event):
 
     # universal_newlines=True is used because `history_main` writes str()s
     # That also means that we don't have to `decode()` the stdout.read()` below.
-    proc = subprocess.Popen([get_fzf_binary_path(), '--tac', '--no-sort', '--tiebreak=index', '+m'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
+    proc = subprocess.Popen([get_fzf_binary_path(), '--tac', '--no-sort', '--tiebreak=index', '+m', '--reverse', '--height=40%'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
     history_main(args=['show', 'all'], stdout=proc.stdin)
     proc.stdin.close()
     proc.wait()
@@ -37,12 +37,12 @@ def fzf_insert_history(event):
 
 
 def fzf_prompt_from_string(string):
-    choice = subprocess.run([get_fzf_binary_path(), '--tiebreak=index', '+m'], input=string, stdout=subprocess.PIPE, universal_newlines=True).stdout.strip()
+    choice = subprocess.run([get_fzf_binary_path(), '--tiebreak=index', '+m', '--reverse', '--height=40%'], input=string, stdout=subprocess.PIPE, universal_newlines=True).stdout.strip()
     return choice
 
 
 @events.on_ptk_create
-def custom_keybindings(shortcut, history, completer, bindings, **kw):
+def custom_keybindings(bindings, **kw):
     def handler(key_name):
         def do_nothing(func):
             pass
