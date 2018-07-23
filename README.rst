@@ -9,7 +9,7 @@
    :alt: Pypi version
    :target: http://pypi.python.org/pypi/xontrib-fzf-widgets
 
-     
+
 This extension will add some fzf widgets to your xonsh shell that you can bind and use as follows:
 
 .. figure:: https://raw.githubusercontent.com/shahinism/xontrib-fzf-widgets/master/docs/cast.gif
@@ -47,3 +47,7 @@ And set your desired keybindings for each widget in `~/.xonshrc` file or set it 
 
     $fzf_history_binding = Keys.ControlR
     $fzf_ssh_binding = Keys.ControlS
+
+You can find the names of various keys here_ in ``python-prompt-toolkit``.
+
+.. _here: https://github.com/jonathanslenders/python-prompt-toolkit/blob/master/prompt_toolkit/keys.py

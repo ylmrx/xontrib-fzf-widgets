@@ -1,45 +1,44 @@
 import os
 import re
-from prompt_toolkit.keys import Keys
-from prompt_toolkit.filters import Condition, EmacsInsertMode, ViInsertMode
+import subprocess
+from xonsh.history.main import history_main
 
 
-class RequiredCommand:
-    def __init__(self, cmd):
-        cmd_path = get_command_path(cmd)
-        self.cmd = cmd_path if cmd else cmd
-
-    def __call__(self, func):
-        def error(msg):
-            print("\nfzf-widgets: command not found: {}".format(self.cmd))
-
-        def wrapped(*args):
-            func(*args)
-
-        if self.cmd:
-            return wrapped
-        else:
-            return error
-
-
-def get_command_path(cmd):
-    result = $(which @(cmd))
-    return os.path.exists(result) if result else None
-
-
-def get_fzf_selector():
-    if $(echo $TMUX):
+def get_fzf_binary_name():
+    if 'TMUX' in ${...}:
         return 'fzf-tmux'
     return 'fzf'
 
 
-def fzf_insert(items, current_buffer, prefix='', suffix=''):
-    selector = get_fzf_selector()
-    choice = $(echo @(items) | @(selector) --tac  --tiebreak=index +m).replace('\n', '')
+def get_fzf_binary_path():
+    path = $(which @(get_fzf_binary_name()))
+    if not path:
+        raise Exception("Could not determine path of fzf using `which`; maybe it is not installed or not on PATH?")
+    return path
+
+
+def fzf_insert_history(event):
+    # Run fzf, feeding it the xonsh history
+    # fzf prints the user's choice on stdout.
+
+    # universal_newlines=True is used because `history_main` writes str()s
+    # That also means that we don't have to `decode()` the stdout.read()` below.
+    proc = subprocess.Popen([get_fzf_binary_path(), '--tac', '--no-sort', '--tiebreak=index', '+m'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
+    history_main(args=['show', 'all'], stdout=proc.stdin)
+    proc.stdin.close()
+    proc.wait()
+    choice = proc.stdout.read().strip()
+
+    # Redraw the shell because fzf used alternate mode
+    event.cli.renderer.erase()
 
     if choice:
-        command = prefix + choice + suffix
-        current_buffer.insert_text(command)
+        event.current_buffer.insert_text(choice)
+
+
+def fzf_prompt_from_string(string):
+    choice = subprocess.run([get_fzf_binary_path(), '--tiebreak=index', '+m'], input=string, stdout=subprocess.PIPE, universal_newlines=True).stdout.strip()
+    return choice
 
 
 @events.on_ptk_create
@@ -54,13 +53,16 @@ def custom_keybindings(shortcut, history, completer, bindings, **kw):
         return do_nothing
 
     @handler('fzf_history_binding')
-    @RequiredCommand('fzf')
     def fzf_history(event):
-        items = $(history show all)
-        fzf_insert(items, event.current_buffer)
+        fzf_insert_history(event)
 
     @handler('fzf_ssh_binding')
-    @RequiredCommand('fzf')
     def fzf_ssh(event):
         items = re.sub(r'(?i)host ', '', $(cat ~/.ssh/config /etc/ssh/ssh_config | grep -i '^host'))
-        fzf_insert(items, event.current_buffer, prefix='ssh ')
+        choice = fzf_prompt_from_string(items)
+
+        # Redraw the shell because fzf used alternate mode
+        event.cli.renderer.erase()
+
+        if choice:
+            event.current_buffer.insert_text('ssh ' + choice)
