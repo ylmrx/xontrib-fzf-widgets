@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 from xonsh.history.main import history_main
+from xonsh.completers.path import complete_path
 
 
 def get_fzf_binary_name():
@@ -37,6 +38,23 @@ def fzf_insert_history(event):
 
 
 def fzf_insert_file(event):
+    before_cursor = event.current_buffer.document.current_line_before_cursor
+    delim_pos = before_cursor.rfind(' ', 0, len(before_cursor))
+    prefix = None
+    if delim_pos != -1 and delim_pos != len(before_cursor) - 1:
+        prefix = before_cursor[delim_pos+1:]
+
+    cwd = None
+    path = ''
+    if prefix:
+        paths = complete_path(os.path.normpath(prefix), before_cursor, 0, len(before_cursor), None)[0]
+        if len(paths) == 1:
+            path = paths.pop()
+            expanded_path = os.path.expandvars(os.path.expanduser(path))
+            if os.path.isdir(expanded_path):
+                cwd = os.getcwd()
+                os.chdir(expanded_path)
+
     env = os.environ
     if 'fzf_find_command' in ${...}:
         env['FZF_DEFAULT_COMMAND'] = $fzf_find_command
@@ -44,12 +62,18 @@ def fzf_insert_file(event):
         env['FZF_DEFAULT_OPTS'] = $FZF_DEFAULT_OPTS
     choice = subprocess.run([get_fzf_binary_path(), '-m', '--reverse', '--height=40%'], stdout=subprocess.PIPE, universal_newlines=True, env=env).stdout.strip()
 
+    if cwd:
+        os.chdir(cwd)
+
     event.cli.renderer.erase()
 
     if choice:
+        if path:
+            event.current_buffer.delete_before_cursor(len(prefix))
+
         command = ''
         for c in choice.splitlines():
-            command += "'" + c.strip() + "' "
+            command += "'" + os.path.join(path, c.strip()) + "' "
 
         event.current_buffer.insert_text(command.strip())
 
