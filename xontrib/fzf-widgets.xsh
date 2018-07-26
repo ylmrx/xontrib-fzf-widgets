@@ -24,8 +24,8 @@ def fzf_insert_history(event):
 
     # universal_newlines=True is used because `history_main` writes str()s
     # That also means that we don't have to `decode()` the stdout.read()` below.
-    proc = subprocess.Popen([get_fzf_binary_path(), '--tac', '--no-sort', '--tiebreak=index', '+m', '--reverse', '--height=40%'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
-    history_main(args=['show', 'all'], stdout=proc.stdin)
+    proc = subprocess.Popen([get_fzf_binary_path(), '--read0', '--tac', '--no-sort', '--tiebreak=index', '+m', '--reverse', '--height=40%'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
+    history_main(args=['show', '-0', 'all'], stdout=proc.stdin)
     proc.stdin.close()
     proc.wait()
     choice = proc.stdout.read().strip()
