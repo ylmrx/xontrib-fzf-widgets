@@ -50,7 +50,7 @@ def fzf_insert_file(event):
         paths = complete_path(os.path.normpath(prefix), before_cursor, 0, len(before_cursor), None)[0]
         if len(paths) == 1:
             path = paths.pop()
-            expanded_path = os.path.expandvars(os.path.expanduser(path))
+            expanded_path = os.path.expanduser(path)
             if os.path.isdir(expanded_path):
                 cwd = os.getcwd()
                 os.chdir(expanded_path)
