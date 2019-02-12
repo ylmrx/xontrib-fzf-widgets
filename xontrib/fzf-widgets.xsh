@@ -4,6 +4,7 @@ import subprocess
 from xonsh.history.main import history_main
 from xonsh.completers.path import complete_path
 from xonsh.platform import ptk_shell_type
+from prompt_toolkit.keys import Keys
 
 def get_fzf_binary_name():
     if 'TMUX' in ${...}:
