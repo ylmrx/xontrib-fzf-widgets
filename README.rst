@@ -31,16 +31,11 @@ Install the package:
 
    pip install xontrib-fzf-widgets
 
-Enable it by adding `fzf-widgets` to your `~/.config/xonsh/config.json` file:
+Enable it by adding `fzf-widgets` to your `~/.xonshrc` file:
 
-.. code-block:: json
+.. code-block:: python
 
-    {
-      "xontribs": [
-        ...,
-        "fzf-widgets"
-      ]
-    }
+    xontrib load fzf-widgets
 
 And set your desired keybindings for each widget in `~/.xonshrc` file or set it to `None` to disable it:
 
