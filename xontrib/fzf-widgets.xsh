@@ -35,7 +35,7 @@ def fzf_insert_history(event):
     event.cli.renderer.erase()
 
     if choice:
-        event.current_buffer.insert_text(choice)
+        event.current_buffer.text = choice
 
 
 def fzf_insert_file(event):
