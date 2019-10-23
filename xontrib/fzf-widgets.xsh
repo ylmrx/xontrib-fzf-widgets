@@ -6,6 +6,8 @@ from xonsh.completers.path import complete_path
 from xonsh.platform import ptk_shell_type
 from prompt_toolkit.keys import Keys
 
+__all__ = ()
+
 def get_fzf_binary_name():
     if 'TMUX' in ${...}:
         return 'fzf-tmux'
