@@ -8,8 +8,9 @@ from prompt_toolkit.keys import Keys
 __all__ = ()
 
 def get_fzf_binary_name():
-    if 'TMUX' in ${...}:
-        return 'fzf-tmux'
+    fzf_tmux_cmd = 'fzf-tmux'
+    if 'TMUX' in ${...} and $(which fzf_tmux_cmd):
+        return fzf_tmux_cmd
     return 'fzf'
 
 
