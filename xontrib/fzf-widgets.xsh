@@ -42,7 +42,7 @@ def fzf_insert_history(event):
         event.current_buffer.text = choice
 
 
-def fzf_insert_file(event):
+def fzf_insert_file(event, dirs_only=False):
     before_cursor = event.current_buffer.document.current_line_before_cursor
     delim_pos = before_cursor.rfind(' ', 0, len(before_cursor))
     prefix = None
@@ -61,8 +61,12 @@ def fzf_insert_file(event):
                 os.chdir(expanded_path)
 
     env = os.environ
-    if 'fzf_find_command' in ${...}:
-        env['FZF_DEFAULT_COMMAND'] = $fzf_find_command
+    if dirs_only:
+        if 'fzf_find_dirs_command' in ${...}:
+            env['FZF_DEFAULT_COMMAND'] = $fzf_find_dirs_command
+    else:
+        if 'fzf_find_command' in ${...}:
+            env['FZF_DEFAULT_COMMAND'] = $fzf_find_command
     if 'FZF_DEFAULT_OPTS' in ${...}:
         env['FZF_DEFAULT_OPTS'] = $FZF_DEFAULT_OPTS
     choice = subprocess.run([get_fzf_binary_path(), '-m', '--reverse', '--height=40%'], stdout=subprocess.PIPE, universal_newlines=True, env=env).stdout.strip()
@@ -117,3 +121,7 @@ def custom_keybindings(bindings, **kw):
     @handler('fzf_file_binding')
     def fzf_file(event):
         fzf_insert_file(event)
+
+    @handler('fzf_dir_binding')
+    def fzf_dir(event):
+        fzf_insert_file(event, True)
