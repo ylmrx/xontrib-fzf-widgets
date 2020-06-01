@@ -2,11 +2,11 @@ from setuptools import setup
 
 setup(
     name='xontrib-fzf-widgets',
-    version='0.0.2',
-    url='https://github.com/shahinism/xontrib-fzf-widgets',
+    version='0.0.3',
+    url='https://github.com/laloch/xontrib-fzf-widgets',
     license='GPLv3',
-    author='Shahin Azad',
-    author_email='me@5hah.in',
+    author='David Strobach',
+    author_email='lalochcz@gmail.com',
     description="fzf widgets for xonsh",
     packages=['xontrib'],
     package_dir={'xontrib': 'xontrib'},
