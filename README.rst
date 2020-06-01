@@ -1,5 +1,8 @@
 `FZF <https://github.com/junegunn/fzf>`_ Widgets for `Xonsh <http://xon.sh>`_
 ======================
+Based on (`now archived <https://github.com/shahinism/xontrib-fzf-widgets>`_) work of `@shahinism <https://github.com/shahinism>`_. Thank you!
+
+The official home of `xontrib-fzf-widgets` is now at https://github.com/laloch/xontrib-fzf-widgets.
 
 .. image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
    :alt: License
