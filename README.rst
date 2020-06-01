@@ -41,9 +41,10 @@ And set your desired keybindings for each widget in `~/.xonshrc` file or set it 
 
 .. code-block:: python
 
-    $fzf_history_binding = Keys.ControlR
-    $fzf_ssh_binding = Keys.ControlS
-    $fzf_file_binding = Keys.ControlT
+    $fzf_history_binding = "c-r"  # Ctrl+R
+    $fzf_ssh_binding = "c-s"      # Ctrl+S
+    $fzf_file_binding = "c-t"     # Ctrl+T
+    $fzf_dir_binding = "c-g"      # Ctrl+G
 
 You can find the names of various keys here_ in ``python-prompt-toolkit``.
 
