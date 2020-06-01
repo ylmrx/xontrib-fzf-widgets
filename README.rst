@@ -19,8 +19,9 @@ Current widgets
 ----------------
 
 - **ssh:** Search in `/etc/ssh/ssh_config` or `~/.ssh/config` items and issue `ssh` command on the chosen item.
-- **history insert** Search in all history entries and insert the chosen command to the prompt.
-- **find file** Find one or more files in the current directory and its sub-directories.
+- **history insert:** Search in all history entries and insert the chosen command to the prompt.
+- **find file:** Find one or more files in the current directory and its sub-directories.
+- **find directory:** Similar to the previous one, but intended to only search for directories.
 
 How to use it
 ----------------
@@ -45,6 +46,16 @@ And set your desired keybindings for each widget in `~/.xonshrc` file or set it 
     $fzf_ssh_binding = "c-s"      # Ctrl+S
     $fzf_file_binding = "c-t"     # Ctrl+T
     $fzf_dir_binding = "c-g"      # Ctrl+G
+
+Other configuration variables:
+
+- ``$fzf_find_command``: A command used by `fzf` to search for files.
+- ``$fzf_find_dirs_command``: A command used by `fzf` to search for directories.
+
+.. code-block:: python
+
+    $fzf_find_command = "fd"
+    $fzf_find_dirs_command = "fd -t d"
 
 You can find the names of various keys here_ in ``python-prompt-toolkit``.
 
