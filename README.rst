@@ -47,8 +47,12 @@ And set your desired keybindings for each widget in `~/.xonshrc` file or set it 
 
     $fzf_history_binding = "c-r"  # Ctrl+R
     $fzf_ssh_binding = "c-s"      # Ctrl+S
-    $fzf_file_binding = "c-t"     # Ctrl+T
+    $fzf_file_binding = "c-t"      # Ctrl+T
     $fzf_dir_binding = "c-g"      # Ctrl+G
+
+You can find the names of various keys here_ in ``python-prompt-toolkit``.
+
+.. _here: https://github.com/jonathanslenders/python-prompt-toolkit/blob/master/prompt_toolkit/keys.py
 
 Other configuration variables:
 
@@ -60,6 +64,6 @@ Other configuration variables:
     $fzf_find_command = "fd"
     $fzf_find_dirs_command = "fd -t d"
 
-You can find the names of various keys here_ in ``python-prompt-toolkit``.
-
-.. _here: https://github.com/jonathanslenders/python-prompt-toolkit/blob/master/prompt_toolkit/keys.py
+Troubleshooting
+----------------
+- If `fzf` shows garbled file names like ``[1;38;5;63maur[0m``, those extra characters are terminal control codes. That most probably means your file finder is set up to produce colorized output. You can either change your ``$fzf_find_command`` and ``$fzf_find_dirs_command`` to remove the coloring or add ``--ansi`` switch to your ``$FZF_DEFAULT_OPTS`` environment variable if you want to preserve the colors. See ``man 1 fzf`` for details.
