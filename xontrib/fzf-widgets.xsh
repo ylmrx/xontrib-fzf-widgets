@@ -110,7 +110,11 @@ def custom_keybindings(bindings, **kw):
 
     @handler('fzf_ssh_binding')
     def fzf_ssh(event):
-        items = re.sub(r'(?i)host ', '', $(cat ~/.ssh/config /etc/ssh/ssh_config | grep -i '^host'))
+        items = '\n'.join(
+             re.findall(r'Host\s(.*)\n?',
+                        $(cat ~/.ssh/config /etc/ssh/ssh_config),
+                        re.IGNORECASE)
+        )
         choice = fzf_prompt_from_string(items)
 
         # Redraw the shell because fzf used alternate mode
