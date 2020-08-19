@@ -41,6 +41,7 @@ def fzf_insert_history(event):
 
     if choice:
         event.current_buffer.text = choice
+        event.current_buffer.cursor_position = len(choice)
 
 
 def fzf_insert_file(event, dirs_only=False):
