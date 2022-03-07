@@ -9,7 +9,7 @@ __all__ = ()
 
 def get_fzf_binary_name():
     fzf_tmux_cmd = 'fzf-tmux'
-    if 'TMUX' in ${...} and $(which fzf_tmux_cmd):
+    if 'TMUX' in ${...} and $(which @(fzf_tmux_cmd)):
         return fzf_tmux_cmd
     return 'fzf'
 
